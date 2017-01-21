@@ -11,11 +11,19 @@ function timedTint() {
 	ctx.rect(0,0,canvas.width,canvas.height);
 	ctx.fill();
 	ctx.beginPath();
-	console.log(m);
 	if(dragging || m++>160){
 		return;
 	}
     setTimeout("timedTint()",40);
+}
+
+function singleTint(){
+	ctx.fillStyle="rgba(200,200,200,0.005)";
+	ctx.globalCompositeOperation = 'source-over';
+    ctx.beginPath();
+	ctx.rect(0,0,canvas.width,canvas.height);
+	ctx.fill();
+	ctx.beginPath();
 }
 
 function quickTint(){

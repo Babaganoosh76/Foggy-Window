@@ -3,39 +3,39 @@ var canvas = document.getElementById('draw');
 var ctx = canvas.getContext('2d');
 
 //Variables
-var radius = 5;
+var radius = 10;
 var dragging = false;
 var tool = 'erase';
+var prevx, prevy;
+console.log(prevx, prevy);
 
 canvas.width = window.innerWidth*0.92;
 canvas.height = window.innerHeight*0.92;
 
 var drawCir = function(e){
-	if(tool=='erase'){
-		ctx.globalCompositeOperation = 'destination-out';
-		radius = 10;
-	}else{
-		ctx.globalCompositeOperation = 'source-over';
-		radius = 5;
-	}
+	ctx.globalCompositeOperation = 'destination-out';
+	ctx.lineWidth = radius*2
+	ctx.fillStyle = "rgba(0,0,0,1)";
 
 	if(dragging){
-		ctx.lineWidth = radius*2
-		ctx.fillStyle="rgba(0,0,0,1)";
-		ctx.lineTo(e.offsetX, e.offsetY);
-		ctx.stroke();
-
+		console.log(prevx, e.offsetX, prevy, e.offsetY);
 		ctx.beginPath();
 		ctx.arc(e.offsetX, e.offsetY, radius, 0, 2*Math.PI);
 		ctx.fill();
 
 		ctx.beginPath();
-		ctx.moveTo(e.offsetX, e.offsetY);
+		ctx.moveTo(prevx, prevy);
+		ctx.lineTo(e.offsetX, e.offsetY);
+		ctx.stroke();
+
+		singleTint();
+		save(e);
 	}
 }
 
 var engage = function(e){
 	dragging = true;
+	save(e);
 	drawCir(e);
 }
 
@@ -46,8 +46,9 @@ var disengage = function(){
 	timedTint();
 }
 
-usetool = function(t) {
-	tool = t;
+var save = function(e){
+	prevx = e.offsetX;
+	prevy = e.offsetY;
 }
 
 canvas.addEventListener('mousedown', engage);
